@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,7 +30,8 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authConfig-> {
-                    authConfig.requestMatchers("").permitAll();
+                    authConfig.requestMatchers(HttpMethod.POST,"/api/v1/auth/**").permitAll();
+                    authConfig.requestMatchers(HttpMethod.GET, "/api/v1/demo").permitAll();
                     authConfig.requestMatchers("error").permitAll();
 
                     authConfig.anyRequest().denyAll();
